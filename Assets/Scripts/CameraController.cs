@@ -1,31 +1,56 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class CameraController : MonoBehaviour
 {
-    //Publisher vai ser o meu dropdown
-    //subsciber vai ser cameracontroller class
-
-    //1 define a delegate - a contract between the publisher and the subscriber. It defines the signature of the method and the subscriber that is called
-    //2 define an event based on the delegate
-    //3 publish the event
-
-    private Dropdown _planetDropdownMenu;
+    //class that controls dropdown planet event
+    private DropdownEvent _planetDropdownMenu;
 
     void Start()
     {
-        _planetDropdownMenu = GameObject.FindGameObjectWithTag("PlanetButton").GetComponent<Dropdown>();
+        _planetDropdownMenu = GameObject.FindGameObjectWithTag("PlanetButton").GetComponent<DropdownEvent>();
+        _planetDropdownMenu.planetClicked += onPlanetClicked;
     }
-
     // Update is called once per frames
     void Update()
     {
     }
+    //we need to subscribe 
+    public void onPlanetClicked(object source, int value)
+    {
+        //switch (dropdown.value) //option on the dropdown
+        //{
 
-    //Have a script in dropdown that references camera and moves it
-    //have a script in cameracontroller that refences dropdown and moves it
+        //    //send an event when changing that lets camera know (subscriber) that needs to move to the correct planet
+        //    case 0: //move to mercury
+        //        Debug.Log("Moving to mercury");
+        //        break;
+        //    case 1://move to venus
+        //        Debug.Log("Moving to venus");
+        //        break;
+        //    case 2: //move to earth
+        //        Debug.Log("Moving to earth");
+        //        break;
+        //    case 3: //move to mars
+        //        Debug.Log("Moving to mars");
+        //        break;
+        //    case 4: //move to jupiter
+        //        Debug.Log("Moving to jupiter");
+        //        break;
+        //    case 5: //move to saturn
+        //        Debug.Log("Moving to saturn");
+        //        break;
+        //    case 6: //move to uranus
+        //        Debug.Log("Moving to uranus");
+        //        break;
+        //    case 7: //move to neptune
+        //        Debug.Log("Moving to neptune");
+        //        break;
 
-    //funtion that depending on the option of the dropdown moves camera to that position
-    
+        //    default: //move to solar system view
+        //        break;
+        //}
+    }
 }
