@@ -1,25 +1,29 @@
-using System;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class CameraController : MonoBehaviour
 {
-    //class that controls dropdown planet event
-    private DropdownEvent _planetDropdownMenu;
+    
+    
 
     void Start()
     {
+        //class that controls dropdown planet event
+        DropdownEvent _planetDropdownMenu;
+
         _planetDropdownMenu = GameObject.FindGameObjectWithTag("PlanetButton").GetComponent<DropdownEvent>();
-        _planetDropdownMenu.planetClicked += onPlanetClicked;
+
+        if (_planetDropdownMenu != null)
+            _planetDropdownMenu.OnDropdownPlanetClickedEventHandler += OnPlanetClicked;
     }
-    // Update is called once per frames
+
     void Update()
     {
     }
-    //we need to subscribe 
-    public void onPlanetClicked(object source, int value)
+
+    //we need to subscribe to the event
+    private void OnPlanetClicked(object sender, DropdownEvent.OnPlanetClickedEventArgs e)
     {
+        Debug.Log(e.planetIndex);
         //switch (dropdown.value) //option on the dropdown
         //{
 
