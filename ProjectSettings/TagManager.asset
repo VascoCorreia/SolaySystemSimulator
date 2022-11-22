@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - PlanetButton
+  - Planet
   layers:
   - Default
   - TransparentFX
