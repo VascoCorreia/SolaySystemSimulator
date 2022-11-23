@@ -8,6 +8,8 @@ public class CelestialBody : MonoBehaviour
     float tilt, diameter, mass;
     [SerializeField]
     int rotationTime;
+    [SerializeField]
+    GameObject parentStar;
 
     //5065452 mercury
     //21021120 venus
@@ -19,20 +21,19 @@ public class CelestialBody : MonoBehaviour
     //57780 neptuno
     //552060 plutao
 
-
     void Rotation()
     {
-        transform.Rotate(0, (360 / diameter) * Time.deltaTime, 0);
+        float rotation = (360 / 5) * Time.deltaTime;
+        transform.Rotate(0, rotation, 0);
     }
     // Start is called before the first frame update
     void Start()
     {
-
         transform.Rotate(0, 0, tilt);
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
        Rotation();
     }

@@ -3,17 +3,13 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] List<GameObject> planetList = new List<GameObject>();
+    [SerializeField] List<GameObject> _planetList = new List<GameObject>();
+    [SerializeField] UIController _uiController;
 
     void Start()
-    {
-        //class that controls dropdown planet event
-        DropdownEvent _planetDropdownMenu;
-
-        _planetDropdownMenu = GameObject.FindGameObjectWithTag("PlanetButton").GetComponent<DropdownEvent>();
-
-        if (_planetDropdownMenu != null)
-            _planetDropdownMenu.OnDropdownPlanetClickedEventHandler += OnPlanetClicked;
+    {   
+        if(_uiController != null)
+            _uiController.OnDropdownPlanetClickedEventHandler += OnPlanetClicked;
     }
 
     void Update()
@@ -21,7 +17,7 @@ public class CameraController : MonoBehaviour
     }
 
     //we need to subscribe to the event
-    void OnPlanetClicked(object sender, DropdownEvent.OnPlanetClickedEventArgs planetDropdownMenuData)
+    void OnPlanetClicked(object sender, UIController.OnPlanetClickedEventArgs planetDropdownMenuData)
     {
         switch (planetDropdownMenuData.planetIndex)
         {
@@ -38,7 +34,7 @@ public class CameraController : MonoBehaviour
                 break;
             case 2: //move to earth
                 Debug.Log("Moving to Earth");
-                GetComponent<Transform>().position = new Vector3(planetList[2].transform.position.x, planetList[2].transform.position.y, planetList[2].transform.position.z);
+                GetComponent<Transform>().position = new Vector3(_planetList[2].transform.position.x, _planetList[2].transform.position.y, _planetList[2].transform.position.z);
                 break;
                 //    case 3: //move to mars
                 //        Debug.Log("Moving to mars");

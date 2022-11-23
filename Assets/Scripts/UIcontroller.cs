@@ -1,17 +1,60 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
-public class UIcontroller : MonoBehaviour
+public class UIController : MonoBehaviour
 {
+    [SerializeField]
+    TMP_Dropdown _dropdown;
+
+    [SerializeField]
+    TMP_Text _timeScale;
+    
+    [SerializeField]
+    Slider _timeScaleSlider;
+
+    //This delegate/"method" will be the event handler in the subscribers
+    //this arguments are .NET convention. source is the class that that is publishing the event, and args is any data that we want to send in the event
+    public event EventHandler<OnPlanetClickedEventArgs> OnDropdownPlanetClickedEventHandler;
+    public event EventHandler<OnTimeScaleChangedEventArgs> OnTimeScaleChangedEventHandler;
+
+    //data to be sent on event
+    public class OnPlanetClickedEventArgs : EventArgs
+    {
+        public int planetIndex;
+    }
+    public class OnTimeScaleChangedEventArgs : EventArgs
+    {
+        public float sliderValue;
+    }
 
     void Start()
     {
-
+        planetDropDownMenuController();
+        timeScaleSliderController();
     }
-    void Update()
+
+    //this method will raise the event and notify subscribers
+    protected virtual void OnPlanetClicked(TMP_Dropdown dropdown)
     {
-        
+        OnDropdownPlanetClickedEventHandler?.Invoke(this, new OnPlanetClickedEventArgs { planetIndex = dropdown.value });
+    }
+
+    protected virtual void OnTimeScaleChanged(Slider slider)
+    {
+        OnTimeScaleChangedEventHandler?.Invoke(this, new OnTimeScaleChangedEventArgs { sliderValue = slider.value });
+    }
+
+    void planetDropDownMenuController()
+    {
+
+        _dropdown?.onValueChanged.AddListener(delegate { OnPlanetClicked(_dropdown); });
+    }
+
+    void timeScaleSliderController()
+    {
+        _timeScaleSlider?.onValueChanged.AddListener(delegate { OnTimeScaleChanged(_timeScaleSlider); });
     }
 }
