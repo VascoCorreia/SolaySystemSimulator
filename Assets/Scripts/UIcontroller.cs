@@ -11,9 +11,12 @@ public class UIController : MonoBehaviour
 
     [SerializeField]
     TMP_Text _timeScale;
-    
+
     [SerializeField]
     Slider _timeScaleSlider;
+
+    [SerializeField]
+    TMP_Text _currTimeStep;
 
     //This delegate/"method" will be the event handler in the subscribers
     //this arguments are .NET convention. source is the class that that is publishing the event, and args is any data that we want to send in the event
@@ -27,7 +30,9 @@ public class UIController : MonoBehaviour
     }
     public class OnTimeScaleChangedEventArgs : EventArgs
     {
-        public float sliderValue;
+        public int sliderValue;
+        public TMP_Text currTimeStep;
+
     }
 
     void Start()
@@ -44,7 +49,7 @@ public class UIController : MonoBehaviour
 
     protected virtual void OnTimeScaleChanged(Slider slider)
     {
-        OnTimeScaleChangedEventHandler?.Invoke(this, new OnTimeScaleChangedEventArgs { sliderValue = slider.value });
+        OnTimeScaleChangedEventHandler?.Invoke(this, new OnTimeScaleChangedEventArgs { sliderValue = (int)slider.value, currTimeStep = _currTimeStep });
     }
 
     void planetDropDownMenuController()

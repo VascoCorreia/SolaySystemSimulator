@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TimeController : MonoBehaviour
@@ -13,12 +14,18 @@ public class TimeController : MonoBehaviour
 
     }
 
+    //maximum value in editor is capped at 100
     private void OnTimeScaleChanged(object sender, UIController.OnTimeScaleChangedEventArgs e)
     {
         #if UNITY_EDITOR
-            Time.timeScale = 50; // Editor limit
-        #else
+            Time.timeScale = e.sliderValue; // Editor limit
+#else
             Time.timeScale = e.sliderValue;
-        #endif
+#endif
+
+        e.currTimeStep.text = e.sliderValue + " seconds / second";
+
+        if(e.sliderValue == 1)
+            e.currTimeStep.text = e.sliderValue + " second / second";
     }
 }
