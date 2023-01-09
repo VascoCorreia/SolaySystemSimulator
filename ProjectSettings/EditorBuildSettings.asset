@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SampleScene-DESKTOP-N03V31V.unity
+    guid: 7cf57b52653230b43aefec6f08e16e42
   m_configObjects: {}

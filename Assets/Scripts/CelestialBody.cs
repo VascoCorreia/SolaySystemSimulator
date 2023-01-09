@@ -1,69 +1,88 @@
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
-
-//5065452 mercury
-//21021120 venus
-//86148 Earth rotation time in seconds (regular time)
-//88632 marte
-//35712 jupiter
-//36828 saturno
-//62028 urano
-//57780 neptuno
-//552060 plutao
+using UnityEngine.Networking;
 
 public class CelestialBody : MonoBehaviour
 {
-    [SerializeField]
-    float tilt = 0, diameter = 1, mass, gravitationalConstant = 6.674e-10f;
+    [SerializeField] int id;
 
-    [SerializeField]
-    int rotationTime = 500000;
+    [SerializeField] float tilt = 0, diameter = 1;
 
-    [SerializeField]
-    Vector3 initialVelocity;
+    [SerializeField] double mass;
 
-    Vector3 currentVelocity;
+    [SerializeField] float rotationTime;
 
+    [SerializeField] Vector3 initialVelocity;
+
+    [SerializeField] NetworkManager _networkManager;
+
+    GravitySimulation gravitySimulation;
+
+    Vector3d currentVelocityDouble;
+    Vector3d positionDouble;
+    private void Awake()
+    {
+        gravitySimulation = new GravitySimulation();
+    }
     void Start()
     {
-        transform.Rotate(0, 0, tilt);
-        currentVelocity = initialVelocity;
+
+        TrailRenderer trailRenderer = gameObject.AddComponent<TrailRenderer>();
+
+        trailRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        trailRenderer.startWidth = 0.2f;
+        trailRenderer.endWidth = 0.01f;
+        trailRenderer.time = 1f;
+        trailRenderer.startColor = new Color(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1));
+        trailRenderer.sortingLayerName = "Foreground";
+
+        currentVelocityDouble = new Vector3d(initialVelocity);
+        positionDouble = new Vector3d(transform.localPosition);
+
+        //InvokeRepeating("GetText", 1, 2);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Rotation();
-        applyGravity();
-    }
-    void Rotation()
-    {
-        //360 degrees divided by total rotation time = degrees rotated per second
-        float rotation = ((360f / rotationTime) * Time.fixedDeltaTime);
-        transform.Rotate(0, rotation, 0);
     }
 
-    //need to move this function somewhere else
-    //this function gives me the force F=ma
-    public void NewtonianGravitation(List<CelestialBody> bodyToPull)
+    public void NewtonianGravitation(CelestialBody[] bodyToPull)
     {
         foreach (CelestialBody body in bodyToPull)
         {
             if (body != this)
             {
-                float distanceBetweenBodiesSqr = (body.transform.position - transform.position).sqrMagnitude;
-
+                double distanceBetweenBodiesSqr = (body.positionDouble - positionDouble).sqrMagnitude;
                 Vector3 directionBetweenBodies = (body.transform.position - transform.position).normalized;
-                Vector3 force = directionBetweenBodies * gravitationalConstant * ((mass * body.mass) / distanceBetweenBodiesSqr);
-                Vector3 acceleration = force / mass;
 
-                currentVelocity += acceleration * (Time.fixedDeltaTime * UnitScaling.fixedGameTime);
+                double force = ((gravitySimulation.gravitationalConstant * (mass * body.mass)) / distanceBetweenBodiesSqr);
+                Vector3d acceleration = new Vector3d(directionBetweenBodies) * (force / mass);
+
+                currentVelocityDouble += acceleration * (Time.fixedDeltaTime * UnitScaling.fixedGameTime);
+
             }
         }
     }
-
     public void applyGravity()
     {
-        transform.position += currentVelocity * (Time.fixedDeltaTime * UnitScaling.fixedGameTime);
-    }
-}
+        positionDouble += currentVelocityDouble * (Time.fixedDeltaTime * UnitScaling.fixedGameTime);
+        transform.localPosition = new Vector3((float)positionDouble.x, (float)positionDouble.y, (float)positionDouble.z);
 
+    }
+
+    void Rotation()
+    {
+        //360 degrees divided by total rotation time = degrees rotated per second
+        double rotation = (360d / rotationTime) * (Time.fixedDeltaTime * UnitScaling.fixedGameTime);
+        transform.Rotate(0, (float)rotation, 0);
+    }
+
+    //void updatePlanetMass()
+    //{
+    //    CelestialBodyData data = ApiRequests.getPlanetData(id);
+    //    _networkManager.getPlanetData(id);
+    //    mass = data.mass;
+    //}
+
+}

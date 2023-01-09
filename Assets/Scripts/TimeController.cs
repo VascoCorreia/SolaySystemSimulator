@@ -18,7 +18,7 @@ public class TimeController : MonoBehaviour
     private void OnTimeScaleChanged(object sender, UIController.OnTimeScaleChangedEventArgs e)
     {
         #if UNITY_EDITOR
-            Time.timeScale = e.sliderValue; // Editor limit
+            UnitScaling.fixedGameTime = e.sliderValue; // Editor limit
 #else
             Time.timeScale = e.sliderValue;
 #endif

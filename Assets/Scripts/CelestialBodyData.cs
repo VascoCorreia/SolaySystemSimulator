@@ -1,0 +1,22 @@
+using System.Collections.Generic;
+using System;
+
+[Serializable]
+public class CelestialBodyData
+{
+    public int id;
+    public string name;
+    public double mass;
+    public int diameter;
+    public int rotationTime;
+    public double initialVelocity;
+    public double tilt;
+    public double distanceToSun;
+
+}
+
+[Serializable]
+public class CelestialBodyDataWrapper
+{
+    public CelestialBodyData[] celestialBodyDataList;
+}
